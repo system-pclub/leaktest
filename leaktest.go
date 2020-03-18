@@ -15,7 +15,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cockroachdb/cockroach/pkg/util/timeutil"
 	"github.com/petermattis/goid"
 )
 
@@ -90,10 +89,10 @@ func AfterTest(t testing.TB) func() {
 
 	return func() {
 		_ = recover()
-		deadline := timeutil.Now().Add(5 * time.Second)
+		deadline := time.Now().UTC().Add(5 * time.Second)
 		for {
 			if err := diffGoroutines(orig); err != nil {
-				if timeutil.Now().Before(deadline) {
+				if time.Now().UTC().Before(deadline) {
 					time.Sleep(50 * time.Millisecond)
 					continue
 				}
